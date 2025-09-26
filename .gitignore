@@ -1,0 +1,6 @@
+*.vsidx
+*.cache
+/.vs
+.vs/SIM800L_Bulk_SMS_Sender/v17/DocumentLayout.backup.json
+WindowsFormsApp1/bin/Debug/ClosedXML.Parser.xml
+/WindowsFormsApp1/bin
