@@ -29,7 +29,7 @@ namespace WindowsFormsApp1
             RichTextBox.CheckForIllegalCrossThreadCalls = false;
             foreach (string s in SerialPort.GetPortNames())
             {
-                comboBoxPortList.Items.Add(s);
+                cmbPortList.Items.Add(s);
             }
             serialPort1.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
 
@@ -39,11 +39,11 @@ namespace WindowsFormsApp1
         #region buttonConnectToPort_Click
         private void buttonConnectToPort_Click(object sender, EventArgs e)
         {
-            if (buttonConnectToPort.Text == "اتصال")
+            if (btnConnectToPort.Text == "اتصال")
             {
-                if (comboBoxPortList.Text != string.Empty)
+                if (cmbPortList.Text != string.Empty)
                 {
-                    serialPort1.PortName = comboBoxPortList.Text;
+                    serialPort1.PortName = cmbPortList.Text;
                     serialPort1.BaudRate = 9600;
 
                     if (!serialPort1.IsOpen)
@@ -80,20 +80,20 @@ namespace WindowsFormsApp1
                                 if (indata.ToUpper().Contains("R800"))
                                 {
                                     ModuleType = "R800C";
-                                    labelModuleType.Text = "R800C";
+                                    lblModuleType.Text = "R800C";
                                 }
                                 else if (indata.ToUpper().Contains("SIM800"))
                                 {
                                     ModuleType = "SIM800C";
-                                    labelModuleType.Text = "SIM800C";
+                                    lblModuleType.Text = "SIM800C";
                                 }
-                                groupBox2.Enabled = true;
-                                buttonRefreshPorts.Enabled = false;
-                                comboBoxPortList.Enabled = false;
-                                buttonConnectToPort.Text = "قطع";
+                                grpMultiSend.Enabled = true;
+                                btnRefreshPorts.Enabled = false;
+                                cmbPortList.Enabled = false;
+                                btnConnectToPort.Text = "قطع";
                                 groupBoxSMS.Enabled = true;
-                                groupBoxRecive.Enabled = true;
-                                groupBoxStatus.Enabled = true;
+                                grpBoxRecive.Enabled = true;
+                                grpStatus.Enabled = true;
 
                                 serialPort1.WriteLine("AT+CMGD=1,4"); // Delete All SMS from SIM
                                 Thread.Sleep(500);
@@ -103,8 +103,8 @@ namespace WindowsFormsApp1
                                 Thread.Sleep(150);
 
                                 //Sim Status - وضعیت سیمکارت
-                                labelSimStatus.ForeColor = Color.Green;
-                                labelSimStatus.Text = "متصل";
+                                lblSimStatus.ForeColor = Color.Green;
+                                lblSimStatus.Text = "متصل";
                                 SimStatusFlag = true;
                                 serialPort1.WriteLine("AT+CIMI");
                                 Thread.Sleep(150);
@@ -136,24 +136,24 @@ namespace WindowsFormsApp1
                 else
                 {
                     MessageBox.Show("لطفاً پورت مورد نظر را انتخاب فرمایید");
-                    comboBoxPortList.Select();
+                    cmbPortList.Select();
                 }
             }
             else
             {
                 serialPort1.Close();
                 indata = "";
-                comboBoxPortList.Enabled = true;
-                buttonConnectToPort.Text = "اتصال";
+                cmbPortList.Enabled = true;
+                btnConnectToPort.Text = "اتصال";
                 groupBoxSMS.Enabled = false;
-                groupBoxRecive.Enabled = false;
-                groupBoxStatus.Enabled = false;
+                grpBoxRecive.Enabled = false;
+                grpStatus.Enabled = false;
 
-                labelModuleType.Text = "";
-                labelSimStatus.Text = "";
-                labelAntenStatus.Text = "";
-                labelNetworkStatus.Text = "";
-                buttonRefreshPorts.Enabled = true;
+                lblModuleType.Text = "";
+                lblSimStatus.Text = "";
+                lblAntenStatus.Text = "";
+                lblNetworkStatus.Text = "";
+                btnRefreshPorts.Enabled = true;
 
                 timer1.Enabled = false;
             }
@@ -173,7 +173,7 @@ namespace WindowsFormsApp1
                 Thread.Sleep(100);
                 this.Cursor = Cursors.WaitCursor;
                 SendFlag = true;
-                SendSMSFunction(textBoxPhone.Text, richTextBoxMSG.Text);
+                SendSMSFunction(txtPhoneNo.Text, txtSingleMessage.Text);
                 this.Cursor = Cursors.Default;
             }
         }
@@ -182,25 +182,25 @@ namespace WindowsFormsApp1
         #region Validation
         private bool Validation()
         {
-            if (textBoxPhone.Text.Trim() == string.Empty)
+            if (txtPhoneNo.Text.Trim() == string.Empty)
             {
                 MessageBox.Show("لطفا شماره موبایل را وارد نمایید", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBoxPhone.Select();
+                txtPhoneNo.Select();
                 return false;
             }
 
-            if (textBoxPhone.Text.Trim().Length != 13)
+            if (txtPhoneNo.Text.Trim().Length != 13)
             {
                 MessageBox.Show("شماره وارد شده صحیح نمی باشد", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBoxPhone.Select();
+                txtPhoneNo.Select();
                 return false;
             }
 
-            if (richTextBoxMSG.Text.Trim() == string.Empty)
+            if (txtSingleMessage.Text.Trim() == string.Empty)
             {
                 if (MessageBox.Show("متن پیامک خالی می باشد.آیا ارسال شود؟", "هشدر", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                 {
-                    richTextBoxMSG.Select();
+                    txtSingleMessage.Select();
                     return false;
                 }
             }
@@ -262,14 +262,14 @@ namespace WindowsFormsApp1
 
                 if (indata.Contains("+CMGS:"))
                 {
-                    label2.ForeColor = Color.Green;
-                    label2.Text = "ارسال شد";
+                    lblResultMessage.ForeColor = Color.Green;
+                    lblResultMessage.Text = "ارسال شد";
                     SendFlag = false;
                 }
                 else if (indata.Contains("ERROR") && SendFlag)
                 {
-                    label2.ForeColor = Color.Red;
-                    label2.Text = "ارسال نشد";
+                    lblResultMessage.ForeColor = Color.Red;
+                    lblResultMessage.Text = "ارسال نشد";
                     SendFlag = false;
                 }
                 else if (indata.Contains("+CMTI:")) //دریافت پیامک مرحله اول
@@ -309,11 +309,11 @@ namespace WindowsFormsApp1
 
                     try
                     {
-                        dataGridViewRecivedSMS.Rows.Add();
-                        dataGridViewRecivedSMS[0, dataGridViewRecivedSMS.Rows.Count - 1].Value = DateTime.Now;
-                        dataGridViewRecivedSMS[1, dataGridViewRecivedSMS.Rows.Count - 1].Value = Phone;
-                        dataGridViewRecivedSMS[2, dataGridViewRecivedSMS.Rows.Count - 1].Value = Msg;
-                        dataGridViewRecivedSMS.Sort(dataGridViewRecivedSMS.Columns[0], System.ComponentModel.ListSortDirection.Descending);
+                        dgvRecivedSMS.Rows.Add();
+                        dgvRecivedSMS[0, dgvRecivedSMS.Rows.Count - 1].Value = DateTime.Now;
+                        dgvRecivedSMS[1, dgvRecivedSMS.Rows.Count - 1].Value = Phone;
+                        dgvRecivedSMS[2, dgvRecivedSMS.Rows.Count - 1].Value = Msg;
+                        dgvRecivedSMS.Sort(dgvRecivedSMS.Columns[0], System.ComponentModel.ListSortDirection.Descending);
                     }
                     catch (Exception exp)
                     {
@@ -328,7 +328,7 @@ namespace WindowsFormsApp1
                     p = (p * 827) + 127;
                     p = p >> 8;
                     p = (p > 100) ? 100 : p;
-                    labelAntenStatus.Text = p.ToString() + "%";
+                    lblAntenStatus.Text = p.ToString() + "%";
                 }
                 else if (indata.Contains("+CREG:"))//وضعیت شبکه
                 {
@@ -336,25 +336,25 @@ namespace WindowsFormsApp1
                     switch (int.Parse(RData[1].Substring(0, 1)))
                     {
                         case 0:
-                            labelNetworkStatus.Text = "Not registered, Not searching";
+                            lblNetworkStatus.Text = "Not registered, Not searching";
                             break;
                         case 1:
-                            labelNetworkStatus.Text = "Registered, home network";
+                            lblNetworkStatus.Text = "Registered, home network";
                             break;
                         case 2:
-                            labelNetworkStatus.Text = "Not registered, searching...";
+                            lblNetworkStatus.Text = "Not registered, searching...";
                             break;
                         case 3:
-                            labelNetworkStatus.Text = "Registration denied";
+                            lblNetworkStatus.Text = "Registration denied";
                             break;
                         case 4:
-                            labelNetworkStatus.Text = "Unknown";
+                            lblNetworkStatus.Text = "Unknown";
                             break;
                         case 5:
-                            labelNetworkStatus.Text = "Registered, roaming";
+                            lblNetworkStatus.Text = "Registered, roaming";
                             break;
                         default:
-                            labelNetworkStatus.Text = indata.Substring(indata.IndexOf("+CREG:") + 6);
+                            lblNetworkStatus.Text = indata.Substring(indata.IndexOf("+CREG:") + 6);
                             break;
                     }
                     //labelNetworkStatus.Text = indata.Substring(indata.IndexOf("+CREG:")+6);
@@ -362,8 +362,8 @@ namespace WindowsFormsApp1
                 }
                 else if (indata.Contains("ERROR") && SimStatusFlag)//وضعیت سیمکارت
                 {
-                    labelSimStatus.ForeColor = Color.Red;
-                    labelSimStatus.Text = "سیمکارت وارد نشده است";
+                    lblSimStatus.ForeColor = Color.Red;
+                    lblSimStatus.Text = "سیمکارت وارد نشده است";
                     SimStatusFlag = false;
                 }
             }
@@ -378,12 +378,20 @@ namespace WindowsFormsApp1
         #region buttonRefreshPorts_Click
         private void buttonRefreshPorts_Click(object sender, EventArgs e)
         {
-            comboBoxPortList.Items.Clear();
-            foreach (string s in SerialPort.GetPortNames())
+            cmbPortList.Items.Clear();
+            cmbPortList.Text = String.Empty;
+
+            if (SerialPort.GetPortNames().Length == 0)
             {
-                comboBoxPortList.Items.Add(s);
+                return;
             }
-            comboBoxPortList.SelectedIndex = 0;
+
+            foreach (var portName in SerialPort.GetPortNames())
+            {
+                cmbPortList.Items.Add(portName);
+            }
+            cmbPortList.SelectedIndex = 0;
+
         }
         #endregion
 
@@ -392,7 +400,7 @@ namespace WindowsFormsApp1
         {
             try
             {
-                MessageBox.Show(dataGridViewRecivedSMS.CurrentRow.Cells[2].Value.ToString(), "متن پیامک");
+                MessageBox.Show(dgvRecivedSMS.CurrentRow.Cells[2].Value.ToString(), "متن پیامک");
             }
             catch (Exception exp)
             {
@@ -405,8 +413,8 @@ namespace WindowsFormsApp1
         private void timer1_Tick(object sender, EventArgs e)
         {
             //Sim Status - وضعیت سیمکارت
-            labelSimStatus.ForeColor = Color.Green;
-            labelSimStatus.Text = "متصل";
+            lblSimStatus.ForeColor = Color.Green;
+            lblSimStatus.Text = "متصل";
             SimStatusFlag = true;
             serialPort1.WriteLine("AT+CIMI");
             Thread.Sleep(150);
@@ -466,13 +474,13 @@ namespace WindowsFormsApp1
                     dt = ReadExcelFile(filePath);
 
                     // ستون‌ها رو دستی طراحی کردی، پس AutoGenerateColumns = false
-                    dataGridView1.AutoGenerateColumns = false;
+                    dgvCustomerList.AutoGenerateColumns = false;
 
                     // اتصال ستون‌های طراحی‌شده به DataTable
-                    dataGridView1.Columns["MobileNumber"].DataPropertyName = "MobileNumber";
-                    dataGridView1.Columns["FullName"].DataPropertyName = "FullName";
+                    dgvCustomerList.Columns["MobileNumber"].DataPropertyName = "MobileNumber";
+                    dgvCustomerList.Columns["FullName"].DataPropertyName = "FullName";
 
-                    dataGridView1.DataSource = dt;
+                    dgvCustomerList.DataSource = dt;
                 }
             }
         }
@@ -487,13 +495,13 @@ namespace WindowsFormsApp1
             Thread.Sleep(100);
             this.Cursor = Cursors.WaitCursor;
             SendFlag = true;
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+            foreach (DataGridViewRow row in dgvCustomerList.Rows)
             {
                 if (!row.IsNewRow) // برای ردیف خالی آخر
                 {
                     var phoneNumber = row.Cells["MobileNumber"].Value;
                     var fullName = row.Cells["FullName"].Value;
-                    SendSMSFunction(phoneNumber.ToString(), SMStxtBox.Text.Replace("[Name]", fullName.ToString()));
+                    SendSMSFunction(phoneNumber.ToString(), txtMultiMessage.Text.Replace("[Name]", fullName.ToString()));
                 }
                 Thread.Sleep(8000);
             }
