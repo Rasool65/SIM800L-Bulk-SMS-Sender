@@ -68,6 +68,7 @@
             this.SMStxtBox = new System.Windows.Forms.RichTextBox();
             this.btnSendAll = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
+            this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBoxSMS.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBoxRecive.SuspendLayout();
@@ -470,6 +471,7 @@
             this.SMStxtBox.Size = new System.Drawing.Size(316, 97);
             this.SMStxtBox.TabIndex = 31;
             this.SMStxtBox.Text = "";
+            this.toolTip2.SetToolTip(this.SMStxtBox, "[name] عزیز");
             // 
             // btnSendAll
             // 
@@ -491,6 +493,14 @@
             this.label11.Size = new System.Drawing.Size(56, 14);
             this.label11.TabIndex = 30;
             this.label11.Text = "متن پیام :";
+            // 
+            // toolTip2
+            // 
+            this.toolTip2.AutomaticDelay = 50;
+            this.toolTip2.AutoPopDelay = 2000;
+            this.toolTip2.InitialDelay = 50;
+            this.toolTip2.ReshowDelay = 10;
+            this.toolTip2.ToolTipTitle = "مثال";
             // 
             // Form1
             // 
@@ -567,6 +577,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridViewTextBoxColumn FullName;
         private System.Windows.Forms.DataGridViewTextBoxColumn MobileNumber;
+        private System.Windows.Forms.ToolTip toolTip2;
     }
 }
 
