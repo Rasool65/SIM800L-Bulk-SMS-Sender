@@ -6,6 +6,7 @@ using System.IO.Ports;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Color = System.Drawing.Color;
 
@@ -485,27 +486,54 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void btnSendAll_Click(object sender, EventArgs e)
+        private async void btnSendAll_Click(object sender, EventArgs e)
         {
+            if (dgvCustomerList == null || dgvCustomerList.Rows.Count == 1)
+            {
+                MessageBox.Show("هیچ شماره‌ای برای ارسال وجود ندارد", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // آماده‌سازی مودم
             serialPort1.WriteLine("AT+CMGF=1");
-            Thread.Sleep(100);
+            await Task.Delay(100);
             serialPort1.WriteLine("AT+CSCS=\"HEX\"");
-            Thread.Sleep(100);
+            await Task.Delay(100);
             serialPort1.WriteLine("AT+CSMP=17,167,0,8");
-            Thread.Sleep(100);
+            await Task.Delay(100);
+
             this.Cursor = Cursors.WaitCursor;
             SendFlag = true;
+
+            var total = dgvCustomerList.Rows.Count - 1;
+            var sent = 0;
+
+            progressBar1.Value = 0;
+            progressBar1.Maximum = total;
+            lblProgress.Text = $"ارسال 0 از {total}";
+
             foreach (DataGridViewRow row in dgvCustomerList.Rows)
             {
-                if (!row.IsNewRow) // برای ردیف خالی آخر
-                {
-                    var phoneNumber = row.Cells["MobileNumber"].Value;
-                    var fullName = row.Cells["FullName"].Value;
-                    SendSMSFunction(phoneNumber.ToString(), txtMultiMessage.Text.Replace("[Name]", fullName.ToString()));
-                }
-                Thread.Sleep(8000);
+                if (row.IsNewRow) continue; // برای ردیف خالی آخر
+                var phoneNumber = row.Cells["MobileNumber"].Value.ToString();
+                var fullName = row.Cells["FullName"].Value.ToString();
+
+                var message = txtMultiMessage.Text.ToLower().Replace("[name]", fullName);
+
+                SendSMSFunction(phoneNumber, message);
+
+                sent++;
+                progressBar1.Value = sent;
+                lblProgress.Text = $"ارسال {sent} از {total}";
+
+                // کمی تأخیر برای پایدار بودن ارسال
+                await Task.Delay(6000);
+
             }
+
             this.Cursor = Cursors.Default;
+            MessageBox.Show("ارسال گروهی تمام شد ✅", "پایان", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
     }
 }

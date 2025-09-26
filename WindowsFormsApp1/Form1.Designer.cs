@@ -60,14 +60,16 @@
             this.grpMultiSend = new System.Windows.Forms.GroupBox();
             this.grpCustomerList = new System.Windows.Forms.GroupBox();
             this.dgvCustomerList = new System.Windows.Forms.DataGridView();
-            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MobileNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnUploadExcel = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.txtMultiMessage = new System.Windows.Forms.RichTextBox();
             this.btnMultiSend = new System.Windows.Forms.Button();
             this.lblMultiText = new System.Windows.Forms.Label();
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
+            this.MobileNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.lblProgress = new System.Windows.Forms.Label();
             this.groupBoxSMS.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.grpBoxRecive.SuspendLayout();
@@ -380,6 +382,8 @@
             // grpMultiSend
             // 
             this.grpMultiSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpMultiSend.Controls.Add(this.lblProgress);
+            this.grpMultiSend.Controls.Add(this.progressBar1);
             this.grpMultiSend.Controls.Add(this.grpCustomerList);
             this.grpMultiSend.Controls.Add(this.btnUploadExcel);
             this.grpMultiSend.Controls.Add(this.label7);
@@ -418,22 +422,11 @@
             this.dgvCustomerList.Size = new System.Drawing.Size(285, 214);
             this.dgvCustomerList.TabIndex = 36;
             // 
-            // FullName
-            // 
-            this.FullName.HeaderText = "نام و نام خانوادگی";
-            this.FullName.Name = "FullName";
-            this.FullName.Width = 140;
-            // 
-            // MobileNumber
-            // 
-            this.MobileNumber.HeaderText = "شماره همراه";
-            this.MobileNumber.Name = "MobileNumber";
-            // 
             // btnUploadExcel
             // 
-            this.btnUploadExcel.Location = new System.Drawing.Point(14, 21);
+            this.btnUploadExcel.Location = new System.Drawing.Point(29, 21);
             this.btnUploadExcel.Name = "btnUploadExcel";
-            this.btnUploadExcel.Size = new System.Drawing.Size(291, 23);
+            this.btnUploadExcel.Size = new System.Drawing.Size(211, 23);
             this.btnUploadExcel.TabIndex = 35;
             this.btnUploadExcel.Text = "انتخاب فایل اکسل";
             this.btnUploadExcel.UseVisualStyleBackColor = true;
@@ -453,10 +446,10 @@
             this.txtMultiMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMultiMessage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtMultiMessage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.txtMultiMessage.Location = new System.Drawing.Point(29, 66);
+            this.txtMultiMessage.Location = new System.Drawing.Point(29, 52);
             this.txtMultiMessage.Name = "txtMultiMessage";
             this.txtMultiMessage.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtMultiMessage.Size = new System.Drawing.Size(211, 97);
+            this.txtMultiMessage.Size = new System.Drawing.Size(211, 84);
             this.txtMultiMessage.TabIndex = 31;
             this.txtMultiMessage.Text = "";
             this.toolTip2.SetToolTip(this.txtMultiMessage, "[name] عزیز");
@@ -464,7 +457,7 @@
             // btnMultiSend
             // 
             this.btnMultiSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMultiSend.Location = new System.Drawing.Point(29, 169);
+            this.btnMultiSend.Location = new System.Drawing.Point(29, 142);
             this.btnMultiSend.Name = "btnMultiSend";
             this.btnMultiSend.Size = new System.Drawing.Size(211, 25);
             this.btnMultiSend.TabIndex = 32;
@@ -476,7 +469,7 @@
             // 
             this.lblMultiText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMultiText.AutoSize = true;
-            this.lblMultiText.Location = new System.Drawing.Point(246, 65);
+            this.lblMultiText.Location = new System.Drawing.Point(246, 51);
             this.lblMultiText.Name = "lblMultiText";
             this.lblMultiText.Size = new System.Drawing.Size(56, 14);
             this.lblMultiText.TabIndex = 30;
@@ -489,6 +482,32 @@
             this.toolTip2.InitialDelay = 50;
             this.toolTip2.ReshowDelay = 10;
             this.toolTip2.ToolTipTitle = "مثال";
+            // 
+            // MobileNumber
+            // 
+            this.MobileNumber.HeaderText = "شماره همراه";
+            this.MobileNumber.Name = "MobileNumber";
+            // 
+            // FullName
+            // 
+            this.FullName.HeaderText = "نام و نام خانوادگی";
+            this.FullName.Name = "FullName";
+            this.FullName.Width = 140;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(14, 192);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(285, 23);
+            this.progressBar1.TabIndex = 38;
+            // 
+            // lblProgress
+            // 
+            this.lblProgress.AutoSize = true;
+            this.lblProgress.Location = new System.Drawing.Point(131, 175);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.Size = new System.Drawing.Size(0, 14);
+            this.lblProgress.TabIndex = 39;
             // 
             // Form1
             // 
@@ -563,9 +582,11 @@
         private System.Windows.Forms.Button btnUploadExcel;
         public System.Windows.Forms.DataGridView dgvCustomerList;
         private System.Windows.Forms.GroupBox grpCustomerList;
+        private System.Windows.Forms.ToolTip toolTip2;
         private System.Windows.Forms.DataGridViewTextBoxColumn FullName;
         private System.Windows.Forms.DataGridViewTextBoxColumn MobileNumber;
-        private System.Windows.Forms.ToolTip toolTip2;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label lblProgress;
     }
 }
 
