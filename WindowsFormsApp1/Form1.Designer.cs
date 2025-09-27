@@ -58,18 +58,18 @@
             this.lblSim = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.grpMultiSend = new System.Windows.Forms.GroupBox();
+            this.lblProgress = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.grpCustomerList = new System.Windows.Forms.GroupBox();
             this.dgvCustomerList = new System.Windows.Forms.DataGridView();
+            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MobileNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnUploadExcel = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.txtMultiMessage = new System.Windows.Forms.RichTextBox();
             this.btnMultiSend = new System.Windows.Forms.Button();
             this.lblMultiText = new System.Windows.Forms.Label();
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
-            this.MobileNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.lblProgress = new System.Windows.Forms.Label();
             this.groupBoxSMS.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.grpBoxRecive.SuspendLayout();
@@ -111,10 +111,10 @@
             this.txtSingleMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSingleMessage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSingleMessage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.txtSingleMessage.Location = new System.Drawing.Point(12, 66);
+            this.txtSingleMessage.Location = new System.Drawing.Point(12, 52);
             this.txtSingleMessage.Name = "txtSingleMessage";
             this.txtSingleMessage.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtSingleMessage.Size = new System.Drawing.Size(211, 97);
+            this.txtSingleMessage.Size = new System.Drawing.Size(211, 84);
             this.txtSingleMessage.TabIndex = 31;
             this.txtSingleMessage.Text = "";
             // 
@@ -132,7 +132,7 @@
             // btnSingleSend
             // 
             this.btnSingleSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSingleSend.Location = new System.Drawing.Point(12, 169);
+            this.btnSingleSend.Location = new System.Drawing.Point(12, 142);
             this.btnSingleSend.Name = "btnSingleSend";
             this.btnSingleSend.Size = new System.Drawing.Size(211, 25);
             this.btnSingleSend.TabIndex = 32;
@@ -154,7 +154,7 @@
             // 
             this.lblSingleText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSingleText.AutoSize = true;
-            this.lblSingleText.Location = new System.Drawing.Point(247, 65);
+            this.lblSingleText.Location = new System.Drawing.Point(243, 51);
             this.lblSingleText.Name = "lblSingleText";
             this.lblSingleText.Size = new System.Drawing.Size(56, 14);
             this.lblSingleText.TabIndex = 30;
@@ -252,7 +252,7 @@
             this.dgvRecivedSMS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvRecivedSMS.Size = new System.Drawing.Size(626, 222);
             this.dgvRecivedSMS.TabIndex = 0;
-            this.dgvRecivedSMS.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRecivedSMS_CellDoubleClick);
+            this.dgvRecivedSMS.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewReceivedSMS_CellDoubleClick);
             // 
             // Column3
             // 
@@ -398,6 +398,21 @@
             this.grpMultiSend.TabStop = false;
             this.grpMultiSend.Text = "ارسال گروهی";
             // 
+            // lblProgress
+            // 
+            this.lblProgress.AutoSize = true;
+            this.lblProgress.Location = new System.Drawing.Point(131, 175);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.Size = new System.Drawing.Size(0, 14);
+            this.lblProgress.TabIndex = 39;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(14, 192);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(285, 23);
+            this.progressBar1.TabIndex = 38;
+            // 
             // grpCustomerList
             // 
             this.grpCustomerList.Controls.Add(this.dgvCustomerList);
@@ -421,6 +436,17 @@
             this.dgvCustomerList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCustomerList.Size = new System.Drawing.Size(285, 214);
             this.dgvCustomerList.TabIndex = 36;
+            // 
+            // FullName
+            // 
+            this.FullName.HeaderText = "نام و نام خانوادگی";
+            this.FullName.Name = "FullName";
+            this.FullName.Width = 140;
+            // 
+            // MobileNumber
+            // 
+            this.MobileNumber.HeaderText = "شماره همراه";
+            this.MobileNumber.Name = "MobileNumber";
             // 
             // btnUploadExcel
             // 
@@ -482,32 +508,6 @@
             this.toolTip2.InitialDelay = 50;
             this.toolTip2.ReshowDelay = 10;
             this.toolTip2.ToolTipTitle = "مثال";
-            // 
-            // MobileNumber
-            // 
-            this.MobileNumber.HeaderText = "شماره همراه";
-            this.MobileNumber.Name = "MobileNumber";
-            // 
-            // FullName
-            // 
-            this.FullName.HeaderText = "نام و نام خانوادگی";
-            this.FullName.Name = "FullName";
-            this.FullName.Width = 140;
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(14, 192);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(285, 23);
-            this.progressBar1.TabIndex = 38;
-            // 
-            // lblProgress
-            // 
-            this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(131, 175);
-            this.lblProgress.Name = "lblProgress";
-            this.lblProgress.Size = new System.Drawing.Size(0, 14);
-            this.lblProgress.TabIndex = 39;
             // 
             // Form1
             // 

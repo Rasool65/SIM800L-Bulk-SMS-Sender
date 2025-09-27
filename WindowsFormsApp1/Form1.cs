@@ -14,12 +14,12 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        SerialPort serialPort1 = new SerialPort();
-        string SMSNum;
-        bool SendFlag = false;
-        bool SimStatusFlag = false;
-        string indata = "";
-        string ModuleType = "sim800c";
+        private readonly SerialPort _serialPort1 = new SerialPort();
+        private string SMSNum;
+        private bool _sendFlag = false;
+        private bool _simStatusFlag = false;
+        private string _inData = "";
+        private string _moduleType = "sim800c";
         private DataTable dt; // جدول دیتا در سطح فرم
 
         #region Form1
@@ -28,11 +28,11 @@ namespace WindowsFormsApp1
             InitializeComponent();
 
             RichTextBox.CheckForIllegalCrossThreadCalls = false;
-            foreach (string s in SerialPort.GetPortNames())
+            foreach (var s in SerialPort.GetPortNames())
             {
                 cmbPortList.Items.Add(s);
             }
-            serialPort1.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+            _serialPort1.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
 
         }
         #endregion
@@ -44,17 +44,17 @@ namespace WindowsFormsApp1
             {
                 if (cmbPortList.Text != string.Empty)
                 {
-                    serialPort1.PortName = cmbPortList.Text;
-                    serialPort1.BaudRate = 9600;
+                    _serialPort1.PortName = cmbPortList.Text;
+                    _serialPort1.BaudRate = 9600;
 
-                    if (!serialPort1.IsOpen)
+                    if (!_serialPort1.IsOpen)
                         try
                         {
-                            indata = "";
-                            serialPort1.Open();
-                            serialPort1.NewLine = "\r";
+                            _inData = "";
+                            _serialPort1.Open();
+                            _serialPort1.NewLine = "\r";
 
-                            serialPort1.WriteLine("AT");
+                            _serialPort1.WriteLine("AT");
                             Thread.Sleep(200);
 
                             int t = 10000;
@@ -63,7 +63,7 @@ namespace WindowsFormsApp1
                             while (t > 0)
                             {
                                 Thread.Sleep(1);
-                                if (indata.Contains("OK"))
+                                if (_inData.Contains("OK"))
                                 {
                                     Connect = true;
                                     break;
@@ -75,17 +75,17 @@ namespace WindowsFormsApp1
                             if (Connect)
                             {
 
-                                serialPort1.WriteLine("AT+GOI");
+                                _serialPort1.WriteLine("AT+GOI");
                                 Thread.Sleep(500);
 
-                                if (indata.ToUpper().Contains("R800"))
+                                if (_inData.ToUpper().Contains("R800"))
                                 {
-                                    ModuleType = "R800C";
+                                    _moduleType = "R800C";
                                     lblModuleType.Text = "R800C";
                                 }
-                                else if (indata.ToUpper().Contains("SIM800"))
+                                else if (_inData.ToUpper().Contains("SIM800"))
                                 {
-                                    ModuleType = "SIM800C";
+                                    _moduleType = "SIM800C";
                                     lblModuleType.Text = "SIM800C";
                                 }
                                 grpMultiSend.Enabled = true;
@@ -96,27 +96,27 @@ namespace WindowsFormsApp1
                                 grpBoxRecive.Enabled = true;
                                 grpStatus.Enabled = true;
 
-                                serialPort1.WriteLine("AT+CMGD=1,4"); // Delete All SMS from SIM
+                                _serialPort1.WriteLine("AT+CMGD=1,4"); // Delete All SMS from SIM
                                 Thread.Sleep(500);
 
                                 //Enable Recive SMS
-                                serialPort1.WriteLine("AT+CNMI=2,1,0,1,0");
+                                _serialPort1.WriteLine("AT+CNMI=2,1,0,1,0");
                                 Thread.Sleep(150);
 
                                 //Sim Status - وضعیت سیمکارت
                                 lblSimStatus.ForeColor = Color.Green;
                                 lblSimStatus.Text = "متصل";
-                                SimStatusFlag = true;
-                                serialPort1.WriteLine("AT+CIMI");
+                                _simStatusFlag = true;
+                                _serialPort1.WriteLine("AT+CIMI");
                                 Thread.Sleep(150);
 
 
                                 //Anten Status - وضعیت آنتن
-                                serialPort1.WriteLine("AT+CSQ");
+                                _serialPort1.WriteLine("AT+CSQ");
                                 Thread.Sleep(150);
 
                                 //Network Status - وضعیت شبکه
-                                serialPort1.WriteLine("AT+CREG?");
+                                _serialPort1.WriteLine("AT+CREG?");
                                 Thread.Sleep(150);
 
                                 // timer1.Enabled = true;
@@ -124,9 +124,9 @@ namespace WindowsFormsApp1
                             else
                             {
                                 MessageBox.Show("اتصال بر قرار نشد");
-                                if (serialPort1.IsOpen)
-                                    serialPort1.Close();
-                                indata = "";
+                                if (_serialPort1.IsOpen)
+                                    _serialPort1.Close();
+                                _inData = "";
                             }
                         }
                         catch
@@ -142,8 +142,8 @@ namespace WindowsFormsApp1
             }
             else
             {
-                serialPort1.Close();
-                indata = "";
+                _serialPort1.Close();
+                _inData = "";
                 cmbPortList.Enabled = true;
                 btnConnectToPort.Text = "اتصال";
                 groupBoxSMS.Enabled = false;
@@ -166,14 +166,14 @@ namespace WindowsFormsApp1
         {
             if (Validation())
             {
-                serialPort1.WriteLine("AT+CMGF=1");
+                _serialPort1.WriteLine("AT+CMGF=1");
                 Thread.Sleep(100);
-                serialPort1.WriteLine("AT+CSCS=\"HEX\"");
+                _serialPort1.WriteLine("AT+CSCS=\"HEX\"");
                 Thread.Sleep(100);
-                serialPort1.WriteLine("AT+CSMP=17,167,0,8");
+                _serialPort1.WriteLine("AT+CSMP=17,167,0,8");
                 Thread.Sleep(100);
                 this.Cursor = Cursors.WaitCursor;
-                SendFlag = true;
+                _sendFlag = true;
                 SendSMSFunction(txtPhoneNo.Text, txtSingleMessage.Text);
                 this.Cursor = Cursors.Default;
             }
@@ -211,19 +211,19 @@ namespace WindowsFormsApp1
         #endregion
 
         #region SendSMSFunction
-        private void SendSMSFunction(string PhoneNo, string Message)
+        private void SendSMSFunction(string phoneNo, string message)
         {
-            serialPort1.WriteLine("AT+CMGS=\"" + PhoneNo + "\"");
+            _serialPort1.WriteLine("AT+CMGS=\"" + phoneNo + "\"");
             Thread.Sleep(100);
-            serialPort1.Write(StringToHex(Message) + '\x001a');
+            _serialPort1.Write(StringToHex(message) + '\x001a');
         }
         #endregion
 
         #region StringToHex
-        private string StringToHex(string hexstring)
+        private string StringToHex(string hexString)
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (char t in hexstring)
+            var sb = new StringBuilder();
+            foreach (var t in hexString)
             {
                 if (Convert.ToInt32(t).ToString("X").Length == 1)
                     sb.Append("000" + Convert.ToInt32(t).ToString("X"));
@@ -258,82 +258,82 @@ namespace WindowsFormsApp1
         {
             try
             {
-                SerialPort sp = (SerialPort)sender;
-                indata = sp.ReadExisting();
+                var sp = (SerialPort)sender;
+                _inData = sp.ReadExisting();
 
-                if (indata.Contains("+CMGS:"))
+                if (_inData.Contains("+CMGS:"))
                 {
                     lblResultMessage.ForeColor = Color.Green;
                     lblResultMessage.Text = "ارسال شد";
-                    SendFlag = false;
+                    _sendFlag = false;
                 }
-                else if (indata.Contains("ERROR") && SendFlag)
+                else if (_inData.Contains("ERROR") && _sendFlag)
                 {
                     lblResultMessage.ForeColor = Color.Red;
                     lblResultMessage.Text = "ارسال نشد";
-                    SendFlag = false;
+                    _sendFlag = false;
                 }
-                else if (indata.Contains("+CMTI:")) //دریافت پیامک مرحله اول
+                else if (_inData.Contains("+CMTI:")) //دریافت پیامک مرحله اول
                 {
 
-                    indata = indata.Replace("\r\n", "");
-                    string[] c = indata.Split(',');
+                    _inData = _inData.Replace("\r\n", "");
+                    var c = _inData.Split(',');
                     SMSNum = c[1];
 
-                    serialPort1.WriteLine("AT+CMGF=1");
+                    _serialPort1.WriteLine("AT+CMGF=1");
                     Thread.Sleep(150);
-                    serialPort1.WriteLine("AT+CSCS=\"UCS2\"");
+                    _serialPort1.WriteLine("AT+CSCS=\"UCS2\"");
                     Thread.Sleep(150);
-                    serialPort1.WriteLine("AT+CSMP=17,167,0,0");
+                    _serialPort1.WriteLine("AT+CSMP=17,167,0,0");
                     Thread.Sleep(150);
                     //serialPort1.WriteLine("AT+CMGR=" + SMSNum + ",1");
-                    serialPort1.WriteLine("AT+CMGR=" + SMSNum);
+                    _serialPort1.WriteLine("AT+CMGR=" + SMSNum);
                     Thread.Sleep(1000);
                 }
-                else if (indata.Contains("+CMGR:"))// دریافت پیامک مرحله دوم
+                else if (_inData.Contains("+CMGR:"))// دریافت پیامک مرحله دوم
                 {
-                    string temp = indata.Substring(indata.IndexOf("+CMGR:"));
-                    string[] RData = temp.Split(',');
-                    string Phone = RData[1].Replace("\"", "");
-                    StringBuilder sb = new StringBuilder();
-                    for (int j = 0; j < Phone.Length; j += 4)
-                        sb.AppendFormat("\\u{0:x4}", Phone.Substring(j, 4));
-                    Phone = System.Text.RegularExpressions.Regex.Unescape(sb.ToString());
-                    Phone = "0" + Phone.Substring(3);
+                    var temp = _inData.Substring(_inData.IndexOf("+CMGR:"));
+                    var rData = temp.Split(',');
+                    var phone = rData[1].Replace("\"", "");
+                    var sb = new StringBuilder();
+                    for (var j = 0; j < phone.Length; j += 4)
+                        sb.AppendFormat("\\u{0:x4}", phone.Substring(j, 4));
+                    phone = System.Text.RegularExpressions.Regex.Unescape(sb.ToString());
+                    phone = "0" + phone.Substring(3);
 
-                    temp = RData[4].Substring(RData[4].IndexOf("\r\n") + 2);
+                    temp = rData[4].Substring(rData[4].IndexOf("\r\n") + 2);
                     temp = temp.Remove(temp.IndexOf("\r\n"));
                     sb.Remove(0, sb.Length);
-                    for (int j = 0; j < temp.Length; j += 4)
+                    for (var j = 0; j < temp.Length; j += 4)
                         sb.AppendFormat("\\u{0:x4}", temp.Substring(j, 4));
-                    string Msg = System.Text.RegularExpressions.Regex.Unescape(sb.ToString());
+                    var msg = System.Text.RegularExpressions.Regex.Unescape(sb.ToString());
 
                     try
                     {
                         dgvRecivedSMS.Rows.Add();
                         dgvRecivedSMS[0, dgvRecivedSMS.Rows.Count - 1].Value = DateTime.Now;
-                        dgvRecivedSMS[1, dgvRecivedSMS.Rows.Count - 1].Value = Phone;
-                        dgvRecivedSMS[2, dgvRecivedSMS.Rows.Count - 1].Value = Msg;
+                        dgvRecivedSMS[1, dgvRecivedSMS.Rows.Count - 1].Value = phone;
+                        dgvRecivedSMS[2, dgvRecivedSMS.Rows.Count - 1].Value = msg;
                         dgvRecivedSMS.Sort(dgvRecivedSMS.Columns[0], System.ComponentModel.ListSortDirection.Descending);
                     }
                     catch (Exception exp)
                     {
-
+                        MessageBox.Show(exp.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    serialPort1.WriteLine("AT+CMGD=" + SMSNum); // Delete SMS from SIM
+                    _serialPort1.WriteLine("AT+CMGD=" + SMSNum); // Delete SMS from SIM
                     Thread.Sleep(150);
                 }
-                else if (indata.Contains("+CSQ:")) //درصد آنتن
+                else if (_inData.Contains("+CSQ:")) //درصد آنتن
                 {
-                    int p = Convert.ToInt32(Regex.Match(indata, @"\d+").ToString());
+                    var p = Convert.ToInt32(Regex.Match(_inData, @"\d+").ToString());
                     p = (p * 827) + 127;
                     p = p >> 8;
                     p = (p > 100) ? 100 : p;
                     lblAntenStatus.Text = p.ToString() + "%";
                 }
-                else if (indata.Contains("+CREG:"))//وضعیت شبکه
+                else if (_inData.Contains("+CREG:"))//وضعیت شبکه
                 {
-                    string[] RData = indata.Substring(indata.IndexOf("+CREG:") + 6).Split(',');
+                    string[] RData = _inData.Substring(_inData.IndexOf("+CREG:") + 6).Split(',');
                     switch (int.Parse(RData[1].Substring(0, 1)))
                     {
                         case 0:
@@ -355,17 +355,17 @@ namespace WindowsFormsApp1
                             lblNetworkStatus.Text = "Registered, roaming";
                             break;
                         default:
-                            lblNetworkStatus.Text = indata.Substring(indata.IndexOf("+CREG:") + 6);
+                            lblNetworkStatus.Text = _inData.Substring(_inData.IndexOf("+CREG:") + 6);
                             break;
                     }
                     //labelNetworkStatus.Text = indata.Substring(indata.IndexOf("+CREG:")+6);
 
                 }
-                else if (indata.Contains("ERROR") && SimStatusFlag)//وضعیت سیمکارت
+                else if (_inData.Contains("ERROR") && _simStatusFlag)//وضعیت سیمکارت
                 {
                     lblSimStatus.ForeColor = Color.Red;
                     lblSimStatus.Text = "سیمکارت وارد نشده است";
-                    SimStatusFlag = false;
+                    _simStatusFlag = false;
                 }
             }
             catch
@@ -397,7 +397,7 @@ namespace WindowsFormsApp1
         #endregion
 
         #region dataGridViewRecivedSMS_CellDoubleClick
-        private void dataGridViewRecivedSMS_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewReceivedSMS_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -405,7 +405,7 @@ namespace WindowsFormsApp1
             }
             catch (Exception exp)
             {
-
+                MessageBox.Show(exp.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -416,24 +416,24 @@ namespace WindowsFormsApp1
             //Sim Status - وضعیت سیمکارت
             lblSimStatus.ForeColor = Color.Green;
             lblSimStatus.Text = "متصل";
-            SimStatusFlag = true;
-            serialPort1.WriteLine("AT+CIMI");
+            _simStatusFlag = true;
+            _serialPort1.WriteLine("AT+CIMI");
             Thread.Sleep(150);
 
 
             //Anten Status - وضعیت آنتن
-            serialPort1.WriteLine("AT+CSQ");
+            _serialPort1.WriteLine("AT+CSQ");
             Thread.Sleep(150);
 
             //Network Status - وضعیت شبکه
-            serialPort1.WriteLine("AT+CREG?");
+            _serialPort1.WriteLine("AT+CREG?");
             Thread.Sleep(150);
         }
         #endregion
 
         private DataTable ReadExcelFile(string filePath)
         {
-            DataTable dt = new DataTable();
+            var dt = new DataTable();
 
             // ستونی که توی DataGridView داری باید همین اسامی رو داشته باشه
             dt.Columns.Add("MobileNumber");
@@ -444,7 +444,7 @@ namespace WindowsFormsApp1
                 var worksheet = workbook.Worksheet(1); // شیت اول
                 var rows = worksheet.RangeUsed().RowsUsed();
 
-                bool isFirstRow = true;
+                var isFirstRow = true;
                 foreach (var row in rows)
                 {
                     if (isFirstRow)
@@ -453,8 +453,8 @@ namespace WindowsFormsApp1
                         continue;
                     }
 
-                    string mobile = row.Cell(1).GetValue<string>(); // ستون اول → شماره
-                    string fullname = row.Cell(2).GetValue<string>(); // ستون دوم → نام
+                    var mobile = row.Cell(1).GetValue<string>(); // ستون اول → شماره
+                    var fullname = row.Cell(2).GetValue<string>(); // ستون دوم → نام
 
                     dt.Rows.Add(mobile, fullname);
                 }
@@ -464,9 +464,9 @@ namespace WindowsFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            using (var openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Title = "یک فایل اکسل انتخاب کنید";
+                openFileDialog.Title = "فایل اکسل شماره ها را انتخاب کنید";
                 openFileDialog.Filter = "Excel Files|*.xlsx;*.xls";
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -495,15 +495,15 @@ namespace WindowsFormsApp1
             }
 
             // آماده‌سازی مودم
-            serialPort1.WriteLine("AT+CMGF=1");
+            _serialPort1.WriteLine("AT+CMGF=1");
             await Task.Delay(100);
-            serialPort1.WriteLine("AT+CSCS=\"HEX\"");
+            _serialPort1.WriteLine("AT+CSCS=\"HEX\"");
             await Task.Delay(100);
-            serialPort1.WriteLine("AT+CSMP=17,167,0,8");
+            _serialPort1.WriteLine("AT+CSMP=17,167,0,8");
             await Task.Delay(100);
 
             this.Cursor = Cursors.WaitCursor;
-            SendFlag = true;
+            _sendFlag = true;
 
             var total = dgvCustomerList.Rows.Count - 1;
             var sent = 0;
