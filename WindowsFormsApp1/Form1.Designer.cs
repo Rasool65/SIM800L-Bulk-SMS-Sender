@@ -62,14 +62,14 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.grpCustomerList = new System.Windows.Forms.GroupBox();
             this.dgvCustomerList = new System.Windows.Forms.DataGridView();
-            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MobileNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnUploadExcel = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.txtMultiMessage = new System.Windows.Forms.RichTextBox();
             this.btnMultiSend = new System.Windows.Forms.Button();
             this.lblMultiText = new System.Windows.Forms.Label();
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
+            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MobileNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxSMS.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.grpBoxRecive.SuspendLayout();
@@ -230,7 +230,7 @@
             this.grpBoxRecive.Enabled = false;
             this.grpBoxRecive.Location = new System.Drawing.Point(12, 233);
             this.grpBoxRecive.Name = "grpBoxRecive";
-            this.grpBoxRecive.Size = new System.Drawing.Size(638, 249);
+            this.grpBoxRecive.Size = new System.Drawing.Size(638, 318);
             this.grpBoxRecive.TabIndex = 37;
             this.grpBoxRecive.TabStop = false;
             this.grpBoxRecive.Text = " پیامک های دریافتی ";
@@ -238,7 +238,6 @@
             // dgvRecivedSMS
             // 
             this.dgvRecivedSMS.AllowUserToAddRows = false;
-            this.dgvRecivedSMS.AllowUserToDeleteRows = false;
             this.dgvRecivedSMS.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvRecivedSMS.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column3,
@@ -250,7 +249,7 @@
             this.dgvRecivedSMS.ReadOnly = true;
             this.dgvRecivedSMS.RowHeadersVisible = false;
             this.dgvRecivedSMS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvRecivedSMS.Size = new System.Drawing.Size(626, 222);
+            this.dgvRecivedSMS.Size = new System.Drawing.Size(626, 291);
             this.dgvRecivedSMS.TabIndex = 0;
             this.dgvRecivedSMS.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewReceivedSMS_CellDoubleClick);
             // 
@@ -384,7 +383,6 @@
             this.grpMultiSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.grpMultiSend.Controls.Add(this.lblProgress);
             this.grpMultiSend.Controls.Add(this.progressBar1);
-            this.grpMultiSend.Controls.Add(this.grpCustomerList);
             this.grpMultiSend.Controls.Add(this.btnUploadExcel);
             this.grpMultiSend.Controls.Add(this.label7);
             this.grpMultiSend.Controls.Add(this.txtMultiMessage);
@@ -393,7 +391,7 @@
             this.grpMultiSend.Enabled = false;
             this.grpMultiSend.Location = new System.Drawing.Point(656, 12);
             this.grpMultiSend.Name = "grpMultiSend";
-            this.grpMultiSend.Size = new System.Drawing.Size(315, 470);
+            this.grpMultiSend.Size = new System.Drawing.Size(315, 215);
             this.grpMultiSend.TabIndex = 40;
             this.grpMultiSend.TabStop = false;
             this.grpMultiSend.Text = "ارسال گروهی";
@@ -408,7 +406,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(14, 192);
+            this.progressBar1.Location = new System.Drawing.Point(14, 186);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(285, 23);
             this.progressBar1.TabIndex = 38;
@@ -416,9 +414,9 @@
             // grpCustomerList
             // 
             this.grpCustomerList.Controls.Add(this.dgvCustomerList);
-            this.grpCustomerList.Location = new System.Drawing.Point(8, 220);
+            this.grpCustomerList.Location = new System.Drawing.Point(656, 238);
             this.grpCustomerList.Name = "grpCustomerList";
-            this.grpCustomerList.Size = new System.Drawing.Size(296, 244);
+            this.grpCustomerList.Size = new System.Drawing.Size(315, 313);
             this.grpCustomerList.TabIndex = 37;
             this.grpCustomerList.TabStop = false;
             this.grpCustomerList.Text = "لیست مشتریان";
@@ -430,23 +428,14 @@
             this.dgvCustomerList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.FullName,
             this.MobileNumber});
-            this.dgvCustomerList.Location = new System.Drawing.Point(6, 24);
+            this.dgvCustomerList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dgvCustomerList.Location = new System.Drawing.Point(3, 18);
             this.dgvCustomerList.MultiSelect = false;
             this.dgvCustomerList.Name = "dgvCustomerList";
+            this.dgvCustomerList.RowHeadersVisible = false;
             this.dgvCustomerList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCustomerList.Size = new System.Drawing.Size(285, 214);
+            this.dgvCustomerList.Size = new System.Drawing.Size(309, 289);
             this.dgvCustomerList.TabIndex = 36;
-            // 
-            // FullName
-            // 
-            this.FullName.HeaderText = "نام و نام خانوادگی";
-            this.FullName.Name = "FullName";
-            this.FullName.Width = 140;
-            // 
-            // MobileNumber
-            // 
-            this.MobileNumber.HeaderText = "شماره همراه";
-            this.MobileNumber.Name = "MobileNumber";
             // 
             // btnUploadExcel
             // 
@@ -509,11 +498,24 @@
             this.toolTip2.ReshowDelay = 10;
             this.toolTip2.ToolTipTitle = "مثال";
             // 
+            // FullName
+            // 
+            this.FullName.HeaderText = "نام و نام خانوادگی";
+            this.FullName.Name = "FullName";
+            this.FullName.Width = 185;
+            // 
+            // MobileNumber
+            // 
+            this.MobileNumber.HeaderText = "شماره همراه";
+            this.MobileNumber.Name = "MobileNumber";
+            this.MobileNumber.Width = 102;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(978, 505);
+            this.ClientSize = new System.Drawing.Size(978, 563);
+            this.Controls.Add(this.grpCustomerList);
             this.Controls.Add(this.grpMultiSend);
             this.Controls.Add(this.grpStatus);
             this.Controls.Add(this.groupBoxSMS);
@@ -580,13 +582,13 @@
         private System.Windows.Forms.Button btnMultiSend;
         private System.Windows.Forms.Label lblMultiText;
         private System.Windows.Forms.Button btnUploadExcel;
-        public System.Windows.Forms.DataGridView dgvCustomerList;
         private System.Windows.Forms.GroupBox grpCustomerList;
         private System.Windows.Forms.ToolTip toolTip2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FullName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MobileNumber;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label lblProgress;
+        private System.Windows.Forms.DataGridView dgvCustomerList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FullName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MobileNumber;
     }
 }
 
