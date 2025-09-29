@@ -60,16 +60,17 @@
             this.grpMultiSend = new System.Windows.Forms.GroupBox();
             this.lblProgress = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.grpCustomerList = new System.Windows.Forms.GroupBox();
-            this.dgvCustomerList = new System.Windows.Forms.DataGridView();
             this.btnUploadExcel = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.txtMultiMessage = new System.Windows.Forms.RichTextBox();
             this.btnMultiSend = new System.Windows.Forms.Button();
             this.lblMultiText = new System.Windows.Forms.Label();
-            this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
+            this.grpCustomerList = new System.Windows.Forms.GroupBox();
+            this.dgvCustomerList = new System.Windows.Forms.DataGridView();
             this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MobileNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnCancelAll = new System.Windows.Forms.Button();
             this.groupBoxSMS.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.grpBoxRecive.SuspendLayout();
@@ -381,6 +382,7 @@
             // grpMultiSend
             // 
             this.grpMultiSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpMultiSend.Controls.Add(this.btnCancelAll);
             this.grpMultiSend.Controls.Add(this.lblProgress);
             this.grpMultiSend.Controls.Add(this.progressBar1);
             this.grpMultiSend.Controls.Add(this.btnUploadExcel);
@@ -410,32 +412,6 @@
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(285, 23);
             this.progressBar1.TabIndex = 38;
-            // 
-            // grpCustomerList
-            // 
-            this.grpCustomerList.Controls.Add(this.dgvCustomerList);
-            this.grpCustomerList.Location = new System.Drawing.Point(656, 238);
-            this.grpCustomerList.Name = "grpCustomerList";
-            this.grpCustomerList.Size = new System.Drawing.Size(315, 313);
-            this.grpCustomerList.TabIndex = 37;
-            this.grpCustomerList.TabStop = false;
-            this.grpCustomerList.Text = "لیست مشتریان";
-            // 
-            // dgvCustomerList
-            // 
-            this.dgvCustomerList.AllowUserToOrderColumns = true;
-            this.dgvCustomerList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCustomerList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.FullName,
-            this.MobileNumber});
-            this.dgvCustomerList.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dgvCustomerList.Location = new System.Drawing.Point(3, 18);
-            this.dgvCustomerList.MultiSelect = false;
-            this.dgvCustomerList.Name = "dgvCustomerList";
-            this.dgvCustomerList.RowHeadersVisible = false;
-            this.dgvCustomerList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCustomerList.Size = new System.Drawing.Size(309, 289);
-            this.dgvCustomerList.TabIndex = 36;
             // 
             // btnUploadExcel
             // 
@@ -490,13 +466,31 @@
             this.lblMultiText.TabIndex = 30;
             this.lblMultiText.Text = "متن پیام :";
             // 
-            // toolTip2
+            // grpCustomerList
             // 
-            this.toolTip2.AutomaticDelay = 50;
-            this.toolTip2.AutoPopDelay = 2000;
-            this.toolTip2.InitialDelay = 50;
-            this.toolTip2.ReshowDelay = 10;
-            this.toolTip2.ToolTipTitle = "مثال";
+            this.grpCustomerList.Controls.Add(this.dgvCustomerList);
+            this.grpCustomerList.Location = new System.Drawing.Point(656, 238);
+            this.grpCustomerList.Name = "grpCustomerList";
+            this.grpCustomerList.Size = new System.Drawing.Size(315, 313);
+            this.grpCustomerList.TabIndex = 37;
+            this.grpCustomerList.TabStop = false;
+            this.grpCustomerList.Text = "لیست مشتریان";
+            // 
+            // dgvCustomerList
+            // 
+            this.dgvCustomerList.AllowUserToOrderColumns = true;
+            this.dgvCustomerList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCustomerList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.FullName,
+            this.MobileNumber});
+            this.dgvCustomerList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dgvCustomerList.Location = new System.Drawing.Point(3, 18);
+            this.dgvCustomerList.MultiSelect = false;
+            this.dgvCustomerList.Name = "dgvCustomerList";
+            this.dgvCustomerList.RowHeadersVisible = false;
+            this.dgvCustomerList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvCustomerList.Size = new System.Drawing.Size(309, 289);
+            this.dgvCustomerList.TabIndex = 36;
             // 
             // FullName
             // 
@@ -509,6 +503,26 @@
             this.MobileNumber.HeaderText = "شماره همراه";
             this.MobileNumber.Name = "MobileNumber";
             this.MobileNumber.Width = 102;
+            // 
+            // toolTip2
+            // 
+            this.toolTip2.AutomaticDelay = 50;
+            this.toolTip2.AutoPopDelay = 2000;
+            this.toolTip2.InitialDelay = 50;
+            this.toolTip2.ReshowDelay = 10;
+            this.toolTip2.ToolTipTitle = "مثال";
+            // 
+            // btnCancelAll
+            // 
+            this.btnCancelAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancelAll.Location = new System.Drawing.Point(29, 142);
+            this.btnCancelAll.Name = "btnCancelAll";
+            this.btnCancelAll.Size = new System.Drawing.Size(211, 25);
+            this.btnCancelAll.TabIndex = 40;
+            this.btnCancelAll.Text = "کنسل";
+            this.btnCancelAll.UseVisualStyleBackColor = true;
+            this.btnCancelAll.Visible = false;
+            this.btnCancelAll.Click += new System.EventHandler(this.btnCancelAll_Click);
             // 
             // Form1
             // 
@@ -589,6 +603,7 @@
         private System.Windows.Forms.DataGridView dgvCustomerList;
         private System.Windows.Forms.DataGridViewTextBoxColumn FullName;
         private System.Windows.Forms.DataGridViewTextBoxColumn MobileNumber;
+        private System.Windows.Forms.Button btnCancelAll;
     }
 }
 

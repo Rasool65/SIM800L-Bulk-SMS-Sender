@@ -18,6 +18,7 @@ namespace WindowsFormsApp1
         private string SMSNum;
         private bool _sendFlag = false;
         private bool _simStatusFlag = false;
+        private CancellationTokenSource _cts;
         private string _inData = "";
         private string _moduleType = "sim800c";
         private DataTable dt; // جدول دیتا در سطح فرم
@@ -255,6 +256,12 @@ namespace WindowsFormsApp1
                     lblResultMessage.ForeColor = Color.Red;
                     lblResultMessage.Text = "ارسال نشد";
                     _sendFlag = false;
+                    if (_cts != null && !_cts.IsCancellationRequested)
+                    {
+                        _cts.Cancel();
+                        btnCancelAll.Visible = false;
+                    }
+
                 }
                 else if (_inData.Contains("+CMTI:")) //دریافت پیامک مرحله اول
                 {
@@ -351,9 +358,9 @@ namespace WindowsFormsApp1
                     _simStatusFlag = false;
                 }
             }
-            catch
+            catch (Exception exp)
             {
-
+                MessageBox.Show(exp.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -477,46 +484,86 @@ namespace WindowsFormsApp1
                 return;
             }
 
+            // اگر یک عملیات قبلی هنوز در حال انجام است، آن را لغو یا نادیده بگیرید
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
+            var token = _cts.Token;
+
             // آماده‌سازی مودم
-            _serialPort1.WriteLine("AT+CMGF=1");
-            await Task.Delay(100);
-            _serialPort1.WriteLine("AT+CSCS=\"HEX\"");
-            await Task.Delay(100);
-            _serialPort1.WriteLine("AT+CSMP=17,167,0,8");
-            await Task.Delay(100);
+            try
+            {
+                _serialPort1.WriteLine("AT+CMGF=1");
+                await Task.Delay(100, token);
+                _serialPort1.WriteLine("AT+CSCS=\"HEX\"");
+                await Task.Delay(100, token);
+                _serialPort1.WriteLine("AT+CSMP=17,167,0,8");
+                await Task.Delay(100, token);
+            }
+            catch (OperationCanceledException)
+            {
+                // اگر کاربر بین آماده‌سازی لغو کرد
+                MessageBox.Show("عملیات لغو شد.", "لغو", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
             this.Cursor = Cursors.WaitCursor;
             _sendFlag = true;
 
             var total = dgvCustomerList.Rows.Count - 1;
             var sent = 0;
-
+            btnCancelAll.Visible = true;
             progressBar1.Value = 0;
             progressBar1.Maximum = total;
             lblProgress.Text = $"ارسال 0 از {total}";
 
-            foreach (DataGridViewRow row in dgvCustomerList.Rows)
+            try
             {
-                if (row.IsNewRow) continue; // برای ردیف خالی آخر
-                var phoneNumber = row.Cells["MobileNumber"].Value.ToString();
-                var fullName = row.Cells["FullName"].Value.ToString();
+                foreach (DataGridViewRow row in dgvCustomerList.Rows)
+                {
+                    if (row.IsNewRow) continue;
 
-                var message = txtMultiMessage.Text.ToLower().Replace("[name]", fullName);
+                    // بررسی لغو درخواست شده قبل از هر ارسال
+                    token.ThrowIfCancellationRequested();
 
-                SendSMSFunction(phoneNumber, message);
+                    var phoneNumber = row.Cells["MobileNumber"].Value?.ToString() ?? string.Empty;
+                    var fullName = row.Cells["FullName"].Value?.ToString() ?? string.Empty;
 
-                sent++;
-                progressBar1.Value = sent;
-                lblProgress.Text = $"ارسال {sent} از {total}";
+                    var message = txtMultiMessage.Text.ToLower().Replace("[name]", fullName);
 
-                // کمی تأخیر برای پایدار بودن ارسال
-                await Task.Delay(6000);
+                    // اگر SendSMSFunction نیاز به پشتیبانی لغو دارد، آن را تغییر دهید تا توکن را قبول کند.
+                    SendSMSFunction(phoneNumber, message);
 
+                    sent++;
+                    progressBar1.Value = sent;
+                    lblProgress.Text = $"ارسال {sent} از {total}";
+
+                    // تأخیر قابل لغو
+                    await Task.Delay(6000, token);
+                }
+
+                MessageBox.Show("ارسال گروهی تمام شد ✅", "پایان", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            this.Cursor = Cursors.Default;
-            MessageBox.Show("ارسال گروهی تمام شد ✅", "پایان", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            catch (OperationCanceledException)
+            {
+                MessageBox.Show("ارسال متوقف شد.", "لغو", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+                _sendFlag = false;
+                _cts?.Dispose();
+                _cts = null;
+            }
         }
 
+        private void btnCancelAll_Click(object sender, EventArgs e)
+        {
+            if (_cts != null && !_cts.IsCancellationRequested)
+            {
+                _cts.Cancel();
+                progressBar1.Value = 0;
+                btnCancelAll.Visible = false;
+            }
+        }
     }
 }
