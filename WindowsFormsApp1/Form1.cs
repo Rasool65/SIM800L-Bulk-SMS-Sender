@@ -425,9 +425,9 @@ namespace WindowsFormsApp1
         {
             var dt = new DataTable();
 
-            // ستونی که توی DataGridView داری باید همین اسامی رو داشته باشه
-            dt.Columns.Add("MobileNumber");
-            dt.Columns.Add("FullName");
+            dt.Columns.Add("MobileNumber", typeof(string));
+            dt.Columns.Add("FullName", typeof(string));
+            dt.Columns.Add("Record", typeof(int));
 
             using (var workbook = new XLWorkbook(filePath))
             {
@@ -435,6 +435,9 @@ namespace WindowsFormsApp1
                 var rows = worksheet.RangeUsed().RowsUsed();
 
                 var isFirstRow = true;
+                var index = 1; // شماره ردیف دیتا تیبل از 1 شروع میشه
+
+
                 foreach (var row in rows)
                 {
                     if (isFirstRow)
@@ -443,14 +446,21 @@ namespace WindowsFormsApp1
                         continue;
                     }
 
-                    var mobile = row.Cell(1).GetValue<string>(); // ستون اول → شماره
-                    var fullname = row.Cell(2).GetValue<string>(); // ستون دوم → نام
+                    var mobile = row.Cell(1).GetValue<string>();
+                    var fullname = row.Cell(2).GetValue<string>();
 
-                    dt.Rows.Add(mobile, fullname);
+                    dt.Rows.Add(mobile, fullname, index);
+
+                    index++; // برای ردیف بعدی
+                }
+                foreach (DataRow dr in dt.Rows)
+                {
+                    Console.WriteLine($"{dr["MobileNumber"]} - {dr["FullName"]} - {dr["Record"]}");
                 }
             }
             return dt;
         }
+
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -470,6 +480,7 @@ namespace WindowsFormsApp1
                     // اتصال ستون‌های طراحی‌شده به DataTable
                     dgvCustomerList.Columns["MobileNumber"].DataPropertyName = "MobileNumber";
                     dgvCustomerList.Columns["FullName"].DataPropertyName = "FullName";
+                    dgvCustomerList.Columns["Record"].DataPropertyName = "Record";
 
                     dgvCustomerList.DataSource = dt;
                 }

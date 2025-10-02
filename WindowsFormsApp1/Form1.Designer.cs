@@ -58,6 +58,7 @@
             this.lblSim = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.grpMultiSend = new System.Windows.Forms.GroupBox();
+            this.btnCancelAll = new System.Windows.Forms.Button();
             this.lblProgress = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnUploadExcel = new System.Windows.Forms.Button();
@@ -67,10 +68,10 @@
             this.lblMultiText = new System.Windows.Forms.Label();
             this.grpCustomerList = new System.Windows.Forms.GroupBox();
             this.dgvCustomerList = new System.Windows.Forms.DataGridView();
+            this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
+            this.Record = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MobileNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnCancelAll = new System.Windows.Forms.Button();
             this.groupBoxSMS.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.grpBoxRecive.SuspendLayout();
@@ -177,7 +178,7 @@
             // btnRefreshPorts
             // 
             this.btnRefreshPorts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRefreshPorts.BackgroundImage = global::WindowsFormsApp1.Properties.Resources.Refresh_24x24;
+            this.btnRefreshPorts.BackgroundImage = global::Bulk_SMS_Sender.Properties.Resources.Refresh_24x24;
             this.btnRefreshPorts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnRefreshPorts.Location = new System.Drawing.Point(71, 22);
             this.btnRefreshPorts.Name = "btnRefreshPorts";
@@ -398,6 +399,18 @@
             this.grpMultiSend.TabStop = false;
             this.grpMultiSend.Text = "ارسال گروهی";
             // 
+            // btnCancelAll
+            // 
+            this.btnCancelAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancelAll.Location = new System.Drawing.Point(29, 142);
+            this.btnCancelAll.Name = "btnCancelAll";
+            this.btnCancelAll.Size = new System.Drawing.Size(211, 25);
+            this.btnCancelAll.TabIndex = 40;
+            this.btnCancelAll.Text = "کنسل";
+            this.btnCancelAll.UseVisualStyleBackColor = true;
+            this.btnCancelAll.Visible = false;
+            this.btnCancelAll.Click += new System.EventHandler(this.btnCancelAll_Click);
+            // 
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
@@ -481,6 +494,7 @@
             this.dgvCustomerList.AllowUserToOrderColumns = true;
             this.dgvCustomerList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCustomerList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Record,
             this.FullName,
             this.MobileNumber});
             this.dgvCustomerList.Dock = System.Windows.Forms.DockStyle.Top;
@@ -492,18 +506,6 @@
             this.dgvCustomerList.Size = new System.Drawing.Size(309, 289);
             this.dgvCustomerList.TabIndex = 36;
             // 
-            // FullName
-            // 
-            this.FullName.HeaderText = "نام و نام خانوادگی";
-            this.FullName.Name = "FullName";
-            this.FullName.Width = 185;
-            // 
-            // MobileNumber
-            // 
-            this.MobileNumber.HeaderText = "شماره همراه";
-            this.MobileNumber.Name = "MobileNumber";
-            this.MobileNumber.Width = 102;
-            // 
             // toolTip2
             // 
             this.toolTip2.AutomaticDelay = 50;
@@ -512,17 +514,23 @@
             this.toolTip2.ReshowDelay = 10;
             this.toolTip2.ToolTipTitle = "مثال";
             // 
-            // btnCancelAll
+            // Record
             // 
-            this.btnCancelAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancelAll.Location = new System.Drawing.Point(29, 142);
-            this.btnCancelAll.Name = "btnCancelAll";
-            this.btnCancelAll.Size = new System.Drawing.Size(211, 25);
-            this.btnCancelAll.TabIndex = 40;
-            this.btnCancelAll.Text = "کنسل";
-            this.btnCancelAll.UseVisualStyleBackColor = true;
-            this.btnCancelAll.Visible = false;
-            this.btnCancelAll.Click += new System.EventHandler(this.btnCancelAll_Click);
+            this.Record.HeaderText = "ردیف";
+            this.Record.Name = "Record";
+            this.Record.Width = 40;
+            // 
+            // FullName
+            // 
+            this.FullName.HeaderText = "نام و نام خانوادگی";
+            this.FullName.Name = "FullName";
+            this.FullName.Width = 145;
+            // 
+            // MobileNumber
+            // 
+            this.MobileNumber.HeaderText = "شماره همراه";
+            this.MobileNumber.Name = "MobileNumber";
+            this.MobileNumber.Width = 102;
             // 
             // Form1
             // 
@@ -601,9 +609,10 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label lblProgress;
         private System.Windows.Forms.DataGridView dgvCustomerList;
+        private System.Windows.Forms.Button btnCancelAll;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Record;
         private System.Windows.Forms.DataGridViewTextBoxColumn FullName;
         private System.Windows.Forms.DataGridViewTextBoxColumn MobileNumber;
-        private System.Windows.Forms.Button btnCancelAll;
     }
 }
 
