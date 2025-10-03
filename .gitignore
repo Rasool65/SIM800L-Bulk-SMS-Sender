@@ -21,3 +21,5 @@ WindowsFormsApp1/bin/Debug/ClosedXML.Parser.xml
 *.db
 /.vs
 /.vs
+/.vs/SIM800L_Bulk_SMS_Sender/v17
+/.vs
