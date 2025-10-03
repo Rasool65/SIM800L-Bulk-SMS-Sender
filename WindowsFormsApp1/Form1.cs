@@ -45,6 +45,7 @@ namespace WindowsFormsApp1
             {
                 if (cmbPortList.Text != string.Empty)
                 {
+
                     _serialPort1.PortName = cmbPortList.Text;
                     _serialPort1.BaudRate = 9600;
 
@@ -120,7 +121,7 @@ namespace WindowsFormsApp1
                                 _serialPort1.WriteLine("AT+CREG?");
                                 Thread.Sleep(150);
 
-                                // timer1.Enabled = true;
+                                timer1.Enabled = true;
                             }
                             else
                             {
@@ -156,7 +157,6 @@ namespace WindowsFormsApp1
                 lblAntenStatus.Text = "";
                 lblNetworkStatus.Text = "";
                 btnRefreshPorts.Enabled = true;
-
                 timer1.Enabled = false;
             }
         }
@@ -357,6 +357,7 @@ namespace WindowsFormsApp1
                     lblSimStatus.Text = "سیمکارت وارد نشده است";
                     _simStatusFlag = false;
                 }
+
             }
             catch (Exception exp)
             {
@@ -495,7 +496,7 @@ namespace WindowsFormsApp1
             _cts?.Dispose();
             _cts = new CancellationTokenSource();
             var token = _cts.Token;
-
+            timer1.Enabled = false;
             // آماده‌سازی مودم
             try
             {
@@ -546,15 +547,17 @@ namespace WindowsFormsApp1
                     lblProgress.Text = $"ارسال {sent} از {total}";
 
                     // تأخیر قابل لغو
-                    await Task.Delay(6000, token);
+                    await Task.Delay(8000, token);
                 }
 
                 MessageBox.Show("ارسال گروهی تمام شد ✅", "پایان", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnMultiSend.Visible = true;
                 btnCancelAll.Visible = false;
+                timer1.Enabled = true;
             }
             catch (OperationCanceledException)
             {
+                timer1.Enabled = true;
                 MessageBox.Show("ارسال متوقف شد.", "لغو", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             finally
@@ -563,6 +566,7 @@ namespace WindowsFormsApp1
                 _sendFlag = false;
                 _cts?.Dispose();
                 _cts = null;
+                timer1.Enabled = true;
             }
         }
 
@@ -570,6 +574,7 @@ namespace WindowsFormsApp1
         {
             if (_cts != null && !_cts.IsCancellationRequested)
             {
+                timer1.Enabled = true;
                 _cts.Cancel();
                 progressBar1.Value = 0;
                 btnCancelAll.Visible = false;
