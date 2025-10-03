@@ -453,10 +453,6 @@ namespace WindowsFormsApp1
 
                     index++; // برای ردیف بعدی
                 }
-                foreach (DataRow dr in dt.Rows)
-                {
-                    Console.WriteLine($"{dr["MobileNumber"]} - {dr["FullName"]} - {dr["Record"]}");
-                }
             }
             return dt;
         }
@@ -514,6 +510,7 @@ namespace WindowsFormsApp1
             {
                 // اگر کاربر بین آماده‌سازی لغو کرد
                 MessageBox.Show("عملیات لغو شد.", "لغو", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnMultiSend.Visible = true;
                 return;
             }
 
@@ -553,6 +550,8 @@ namespace WindowsFormsApp1
                 }
 
                 MessageBox.Show("ارسال گروهی تمام شد ✅", "پایان", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnMultiSend.Visible = true;
+                btnCancelAll.Visible = false;
             }
             catch (OperationCanceledException)
             {
